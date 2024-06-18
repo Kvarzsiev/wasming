@@ -1,0 +1,25 @@
+(module
+  (func $fibonacci (param $n i32) (result i32)
+    (local $a i32) (local $b i32) (local $i i32) (local $tmp i32)
+    (local.set $a (i32.const 0))
+    (local.set $b (i32.const 1))
+    (local.set $i (i32.const 2))
+    (block $exit
+      (loop $loop
+        (br_if $exit (i32.ge_u (local.get $i) (local.get $n)))
+        (local.set $tmp (local.get $b))
+        (local.set $b (i32.add (local.get $a) (local.get $b)))
+        (local.set $a (local.get $tmp))
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br $loop)
+      )
+    )
+    (if (result i32) 
+      (i32.eq (local.get $n) (i32.const 0)) 
+      (then (local.get $a)) 
+      (else (local.get $b))
+    )
+  )
+  (export "fibonacci" (func $fibonacci))
+)
+

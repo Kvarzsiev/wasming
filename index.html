@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Fibonacci WebAssembly</title>
+  </head>
+  <body>
+    <h1>Fibonacci WebAssembly</h1>
+    <p>Enter a number:</p>
+    <input type="number" id="numberInput" value="10" />
+    <button onclick="calculateFibonacci()">Calculate</button>
+    <p>Result: <span id="result"></span></p>
+
+    <script>
+      async function loadWasm() {
+        const response = await fetch("fibonacci.wasm");
+        const bytes = await response.arrayBuffer();
+        const { instance } = await WebAssembly.instantiate(bytes);
+        return instance.exports;
+      }
+
+      async function calculateFibonacci() {
+        const numberInput = document.getElementById("numberInput").value;
+        const fibonacci = await loadWasm();
+        const result = fibonacci.fibonacci(Number(numberInput));
+        document.getElementById("result").innerText = result;
+      }
+
+      window.onload = loadWasm;
+    </script>
+  </body>
+</html>
